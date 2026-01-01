@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌀 AngryDroid — Sovereign Capsule Hub (3D Interactive)</title>
+  <style>
+    /* Original Styles with CRT enhancements */
+    body {
+      background-color: #c0c0c0;
+      font-family: "Times New Roman", serif;
+      margin: 0;
+      padding: 0;
+      color: #000000;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.7;
+    }
+    
+    .crt-overlay::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 2px, 3px 100%;
+      z-index: 2;
+    }
+    
+    .crt-overlay::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: rgba(18, 16, 16, 0.1);
+      opacity: 0.2;
+      z-index: 2;
+      pointer-events: none;
+    }
+    
+    .mode-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1001;
+      background: #000080;
+      color: #ffff00;
+      border: 2px outset #c0c0c0;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+    }
+    
+    /* Classic Mode Styles */
+    .classic-mode {
+      position: relative;
+      z-index: 1;
+      padding: 10px;
+      background-color: #c0c0c0;
+    }
+    
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      color: #000080;
+      font-family: Arial, sans-serif;
+      margin-top: 20px;
+    }
+    
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      background: #000080;
+      color: #ffff00;
+      padding: 5px 0;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    
+    marquee {
+      color: #ffff00;
+      font-size: 14px;
+    }
+    
+    .counter {
+      text-align: center;
+      font-size: 14px;
+      margin: 15px 0;
+    }
+    
+    .link-section {
+      border: 2px outset #c0c0c0;
+      background: #e0e0e0;
+      padding: 10px;
+      margin: 15px 0;
+    }
+    
+    .link-section h2 {
+      font-size: 18px;
+      color: #000080;
+      margin-top: 0;
+      border-bottom: 1px dotted #000000;
+      padding-bottom: 5px;
+    }
+    
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .link {
+      background: #e0e0e0;
+      border: 2px outset #c0c0c0;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #0000ff;
+      font-size: 14px;
+    }
+    
+    .link:hover {
+      background: #c0c0c0;
+    }
+    
+    .link:visited {
+      color: #800080;
+    }
+    
+    .blink {
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    .webring {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .webring img {
+      border: 2px outset #c0c0c0;
+    }
+    
+    .webring-links {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .webring-links a {
+      background: #e0e0e0;
+      border: 2px outset #c0c0c0;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #0000ff;
+    }
+    
+    .webring-links a:hover {
+      background: #c0c0c0;
+    }
+    
+    .donate {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .donate a {
+      background: #ffff00;
+      border: 2px outset #c0c0c0;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #000000;
+      font-weight: bold;
+    }
+    
+    .donate a:hover {
+      background: #c0c0c0;
+    }
+    
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #808080;
+      margin-top: 30px;
+      border-top: 1px dotted #808080;
+      padding-top: 10px;
+    }
+    
+    .construction {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .construction img {
+      vertical-align: middle;
+    }
+    
+    .counter {
+      background: #e0e0e0;
+      border: 2px inset #c0c0c0;
+      padding: 5px;
+      display: inline-block;
+      font-family: "Courier New", monospace;
+    }
+    
+    /* 3D Mode Styles */
+    .three-d-mode {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #060a10;
+    }
+    
+    /* ===== 3D Scene Styles ===== */
+    .scene-wrap { 
+      position: fixed; 
+      inset: 0; 
+      overflow: hidden; 
+      background: radial-gradient(120% 120% at 50% 50%, #0b1220 0%, #05070c 65%, #000 100%); 
+    }
+    
+    .scene-wrap::before {
+      content: ""; 
+      pointer-events: none; 
+      position: absolute; 
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, rgba(0,0,0,0.05) 1px);
+      background-size: 100% 2px; 
+      mix-blend-mode: overlay;
+    }
+    
+    .scene-wrap::after {
+      content: ""; 
+      pointer-events: none; 
+      position: absolute; 
+      inset: -4px;
+      box-shadow: inset 0 0 70px rgba(0,180,255,0.08), inset 0 0 180px rgba(0,180,255,0.06);
+      border-radius: 8px; 
+      filter: blur(0.6px);
+    }
+    
+    .noise { 
+      position: absolute; 
+      inset: 0; 
+      pointer-events: none; 
+      opacity: 0.05; 
+      mix-blend-mode: screen;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+      animation: noiseShift 10s linear infinite;
+    }
+    
+    @keyframes noiseShift { 
+      0%{transform:translate(0,0) scale(1)} 
+      50%{transform:translate(-10px,8px) scale(1.02);opacity:.06} 
+      100%{transform:translate(0,0) scale(1)} 
+    }
+    
+    .chromatic { 
+      position: absolute; 
+      inset: 0; 
+      pointer-events: none; 
+      mix-blend-mode: lighten; 
+      opacity: 0.06;
+      background: radial-gradient(circle at 50% 50%, rgba(0,255,255,0.35), transparent 40%), radial-gradient(circle at 52% 48%, rgba(255,0,255,0.35), transparent 40%);
+      animation: chroma 3.5s ease-in-out infinite;
+    }
+    
+    @keyframes chroma { 
+      0%{transform:translate(0,0);opacity:.04} 
+      50%{transform:translate(1px,-1px);opacity:.08} 
+      100%{transform:translate(0,0);opacity:.04} 
+    }
+
+    /* ===== HUD / Title ===== */
+    .titlebar { 
+      position: absolute; 
+      top: 16px; 
+      left: 20px; 
+      right: 20px; 
+      height: 70px; 
+      display: flex; 
+      align-items: center; 
+      gap: 16px; 
+      padding: 10px 16px; 
+      color: #cfe7ff; 
+      text-shadow: 0 0 6px rgba(140,220,255,0.35); 
+      z-index: 3; 
+    }
+    
+    .logo { 
+      width: 54px; 
+      height: 54px; 
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #7ff, #08a 60%), radial-gradient(circle at 65% 65%, rgba(0,255,200,0.35), transparent 60%);
+      box-shadow: 0 0 10px rgba(120,220,255,0.4);
+    }
+    
+    .title-3d { 
+      font-size: 22px; 
+      letter-spacing: 0.4px; 
+      filter: drop-shadow(0 0 2px rgba(80,180,255,0.4)); 
+    }
+    
+    .subtitle { 
+      margin-left: auto; 
+      font-size: 12px; 
+      opacity: 0.8; 
+    }
+
+    /* ===== 3D Scene ===== */
+    .scene { 
+      position: absolute; 
+      inset: 0; 
+      perspective: 1200px; 
+      perspective-origin: 50% 40%; 
+      overflow: hidden;
+    }
+    
+    .camera { 
+      position: absolute; 
+      left: 50%; 
+      top: 50%; 
+      transform-style: preserve-3d; 
+    }
+    
+    .world { 
+      position: absolute; 
+      transform-style: preserve-3d; 
+    }
+    
+    .stars { 
+      position: absolute; 
+      inset: -2000px; 
+      background:
+          radial-gradient(circle at 10% 20%, rgba(180,255,255,0.12) 0 1px, transparent 2px),
+          radial-gradient(circle at 80% 70%, rgba(180,255,255,0.08) 0 1px, transparent 2px),
+          radial-gradient(circle at 40% 50%, rgba(180,255,255,0.10) 0 1px, transparent 2px),
+          repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 2px, transparent 3px 16px);
+      transform: translateZ(-1000px) scale(2);
+      opacity: 0.45;
+    }
+
+    /* ===== Node Pane ===== */
+    .pane { 
+      position: absolute; 
+      width: 420px; 
+      height: 280px; 
+      transform-style: preserve-3d; 
+      cursor: pointer; 
+    }
+    
+    .frame {
+      position: absolute; 
+      inset: 0; 
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(22,40,60,0.95), rgba(8,16,26,0.96));
+      border: 1px solid rgba(140,220,255,0.22);
+      box-shadow: inset 0 0 20px rgba(120,200,255,0.12), 0 0 24px rgba(40,140,220,0.18);
+      overflow: hidden;
+      transform: translateZ(0px);
+      transition: transform 300ms ease, filter 300ms ease;
+      filter: drop-shadow(0 8px 20px rgba(60,180,255,0.18));
+    }
+    
+    .pane:hover .frame { 
+      transform: translateZ(40px); 
+      filter: drop-shadow(0 16px 30px rgba(80,200,255,0.28)); 
+    }
+    
+    .bar { 
+      height: 28px; 
+      display: flex; 
+      align-items: center; 
+      padding: 0 8px;
+      background: linear-gradient(180deg, #1c4a86 0%, #10335f 100%); 
+      border-bottom: 1px solid #0c294d; 
+      color: #e9f4ff; 
+      font-size: 12px; 
+      letter-spacing: 0.2px; 
+      text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+    }
+    
+    .dots { 
+      display: inline-flex; 
+      gap: 6px; 
+      margin-right: 8px; 
+    }
+    
+    .dot { 
+      width: 10px; 
+      height: 10px; 
+      border-radius: 50%; 
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.35); 
+    }
+    
+    .close { background: #ff5f56; }
+    .min { background: #ffbd2e; }
+    .max { background: #27c93f; }
+    
+    .content { 
+      position: absolute; 
+      top: 28px; 
+      left: 0; 
+      right: 0; 
+      bottom: 0; 
+      background: #0a1625; 
+    }
+    
+    iframe, .fallback { 
+      position: absolute; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      border: 0; 
+      background: #0b1520; 
+      color: #bde1ff; 
+    }
+    
+    .fallback { 
+      display: grid; 
+      place-items: center; 
+      padding: 20px; 
+      text-align: center; 
+      font-size: 13px; 
+    }
+    
+    .thumb { 
+      width: 84%; 
+      height: 62%; 
+      margin-bottom: 10px; 
+      border-radius: 4px; 
+      background: linear-gradient(180deg, #123, #0a1a2a); 
+      box-shadow: inset 0 0 20px rgba(90,180,255,0.18); 
+      border: 1px dashed rgba(150,220,255,0.25); 
+    }
+    
+    .hint { 
+      position: absolute; 
+      bottom: 6px; 
+      right: 8px; 
+      font-size: 11px; 
+      opacity: 0.75; 
+      background: rgba(8,24,40,0.65); 
+      padding: 2px 6px; 
+      border-radius: 4px; 
+      border: 1px solid rgba(150,220,255,0.2); 
+    }
+    
+    .pane-crt { 
+      position: absolute; 
+      inset: 0; 
+      pointer-events: none; 
+      background: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); 
+      background-size: 100% 2px; 
+      mix-blend-mode: overlay; 
+    }
+    
+    .glass { 
+      position: absolute; 
+      inset: 0; 
+      pointer-events: none; 
+      background:
+          radial-gradient(120% 100% at 50% 10%, rgba(255,255,255,0.12), transparent 60%),
+          radial-gradient(120% 100% at 50% 100%, rgba(0,140,255,0.08), transparent 70%); 
+    }
+
+    /* ===== Status HUD ===== */
+    .status { 
+      position: absolute; 
+      bottom: 16px; 
+      left: 20px; 
+      right: 20px; 
+      display: flex; 
+      gap: 12px; 
+      align-items: center; 
+      font-size: 12px; 
+      opacity: 0.9; 
+      color: #98c9f0; 
+      z-index: 3; 
+    }
+    
+    .pill { 
+      padding: 6px 10px; 
+      border: 1px solid rgba(110,200,255,0.25); 
+      background: linear-gradient(180deg, rgba(18,42,70,0.9), rgba(8,18,30,0.92)); 
+      border-radius: 6px; 
+    }
+    
+    .btn { 
+      cursor: pointer; 
+      border-color: #538dd4; 
+      background: linear-gradient(180deg, #2f64a8, #1c4a86); 
+    }
+    
+    .btn:active { 
+      transform: translateY(1px); 
+      background: linear-gradient(180deg, #1c4a86, #163d71); 
+    }
+    
+    /* CRT Off State */
+    .crt-off .scene-wrap::before,
+    .crt-off .chromatic,
+    .crt-off .pane .pane-crt {
+      opacity: 0 !important;
+      background: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Mode Toggle Button -->
+  <div class="mode-toggle" id="modeToggle">🚀 Enter 3D Mode</div>
+  
+  <!-- CRT Overlay -->
+  <div class="crt-overlay"></div>
+  
+  <!-- Classic Mode (Original Layout) -->
+  <div class="classic-mode" id="classicMode">
+    <div style="text-align: center;">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='31'%3E%3Crect width='88' height='31' fill='%23000080'/%3E%3Ctext x='10' y='20' font-family='Arial' font-size='14' fill='%23ffffff'%3EAngryDroid%3C/text%3E%3C/svg%3E" alt="AngryDroid Logo" style="border: 2px outset #c0c0c0;">
+    </div>
+    
+    <h1>🌀 AngryDroid Capsule Hub</h1>
+    
+    <!-- Animated Marquee -->
+    <div class="marquee-container">
+      <marquee behavior="scroll" direction="left" scrollamount="3">
+        🚀 Welcome to the AngryDroid Capsule Hub - Your portal to the mythic network! 🚀
+      </marquee>
+    </div>
+    
+    <!-- Visitor Counter -->
+    <div class="counter">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/css' width='15' height='15'%3E%3Crect width='15' height='15' fill='%23000080'/%3E%3C/svg%3E" alt="Counter">
+      Visitors: <span id="visitorCount">000001</span>
+    </div>
+    
+    <!-- Construction Warning -->
+    <div class="construction">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23ffff00'/%3E%3Ctext x='20' y='25' text-anchor='middle' font-family='Arial' font-size='16'%3E!%3C/text%3E%3C/svg%3E" alt="Warning">
+      <span style="color: #ff0000; font-weight: bold;">UNDER CONSTRUCTION</span>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23ffff00'/%3E%3Ctext x='20' y='25' text-anchor='middle' font-family='Arial' font-size='16'%3E!%3C/text%3E%3C/svg%3E" alt="Warning">
+    </div>
+    
+    <!-- Main Content Sections -->
+    <div class="link-section">
+      <h2>🌀 Main Applications</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/angrydroidwebsite/">🌀 Website</a>
+        <a class="link" href="https://angrydroid.neocities.org/crt/">🧠 CRT</a>
+        <a class="link" href="https://angrydroid.neocities.org/fortune_fairy/">🔮 Fortune Fairy</a>
+        <a class="link" href="https://angrydroid.neocities.org/glitch_purge/">⚡ Glitch Purge</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_radar/">📡 Radar</a>
+        <a class="link" href="https://angrydroid.neocities.org/swamp_blog/">🌊 Swamp Blog</a>
+        <a class="link" href="https://angrydroid.neocities.org/chat/">💬 Chat</a>
+        <a class="link" href="https://angrydroid.neocities.org/coder/">💻 Coder</a>
+        <a class="link" href="https://angrydroid.neocities.org/qwens_web/">🤖 Qwens Web</a>
+        <a class="link" href="https://angrydroid.neocities.org/angry_ai/">🔥🤖 Angry AI</a>
+        <a class="link" href="https://angrydroid.neocities.org/safe_haven/">🤖 Safe Haven</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>🧰 Development Tools</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/html_instruct/index.HTML">🧰 Html Instruct</a>
+        <a class="link" href="https://angrydroid.neocities.org/website_compatibility_tester/">🔧 Website Compatibility Tester</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_capsule_builder/">📝 Mythic Capsule Builder</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic-capsule-pro/">💻 Mythic Capsule Pro</a>
+        <a class="link" href="https://angrydroid.neocities.org/ai_prompt_generator/">💻 AI Prompt Generator</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>🌐 Mythic Network</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/mythic_space/">🌐 Mythic Space</a>
+        <a class="link" href="https://angrydroid.neocities.org/galactic_mahem_neon_skies/">🚀 Galactic Mahem Neon Skies</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic%20pet/">🐾 Mythic Pet</a>
+        <a class="link" href="https://angrydroid.neocities.org/pixel%20art%20shrine%20editor/">🌟 Pixel Art Editor</a>
+        <a class="link" href="https://angrydroid.neocities.org/tag_it/">🎨 Tag It</a>
+        <a class="link" href="https://angrydroid.neocities.org/wizards_escape/">🧙 Wizards Escape</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>🛠️ Utilities</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/watermark_maker/">🧰 Watermark Maker</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_sticker_maker/">🫨 Mythic Sticker Maker</a>
+        <a class="link" href="https://angrydroid.neocities.org/code_repository_blog/repository%20project">📓 Code Repository Blog</a>
+        <a class="link" href="https://angrydroid.neocities.org/gallery_shrine/">🛕 Gallery Shrine</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythicos/">🌐 Mythicos</a>
+        <a class="link" href="https://angrydroid.neocities.org/retro_70s_crt_%20oS/">⚡ Retro 70s Crt Os</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_virtual_cafe/">🌐 Mythic Virtual Cafe </a>
+        <a class="link" href="https://angrydroid.neocities.org/neural_browser/">🧠 Neural Browser</a>
+        <a class="link" href="https://angrydroid.neocities.org/neural_chat/">💬 Neural Chat</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>🎵 Media & Productivity</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/mythic_media_player/media_player">🎵 Media Player</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_beatbox/">🫧  Mythic Beatbox</a>
+        <a class="link" href="https://angrydroid.neocities.org/keyboard_piano/inde">🎵 Keyboard Piano</a>
+        <a class="link" href="https://angrydroid.neocities.org/sonic_oscillograph77/">⚡ Sonic Oscillograph77</a>
+        <a class="link" href="https://angrydroid.neocities.org/nerual_voice_terminal/">✍️  Nerual Voice Terminal</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_calendar/">📅 Mythic Calendar</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_Calculator%20/">🧮 Calculator</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_notepad/">📝 Notepad</a>
+        <a class="link" href="https://angrydroid.neocities.org/worldmap/">🗺️ World Map</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>🔒 Security</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/passwordgenrator/">🔑 Password Generator</a>
+        <a class="link" href="https://angrydroid.neocities.org/matrix_encryptor/">🧬 Matrix Encryptor</a>
+        <a class="link" href="https://angrydroid.neocities.org/securityscanner/">🛡️ Security Scanner</a>
+        <a class="link" href="https://angrydroid.neocities.org/security_wizard/">🧙 Security Wizard</a>
+        <a class="link" href="https://angrydroid.neocities.org/rf_%20anomaly_detection_system/">🛡️ Anomaly Detection System</a>
+        <a class="link" href="https://angrydroid.neocities.org/mythic_vault_uplink/">🔐 Vault Uplink</a>
+      </div>
+    </div>
+    
+    <div class="link-section">
+      <h2>📦 Miscellaneous</h2>
+      <div class="links">
+        <a class="link" href="https://angrydroid.neocities.org/angrydroid_ai_lab/">🧪 Angrydroid AI Lab</a>
+        <a class="link" href="https://angrydroid.neocities.org/fungal_evolution_research_suite/">🧪 Fungal Evolution Research Suite</a>
+        <a class="link" href="https://angrydroid.neocities.org/quantum_wormhole_simulation_lab/">🧪 Quantum Wormhole Simulation Lab</a>
+        <a class="link" href="https://angrydroid.neocities.org/multiverse_ai_research_lab/">🧪 Multiverse AI Research Lab</a>
+        <a class="link" href="https://angrydroid.neocities.org/ai_medical_research_lab/">🧪 AI Medical Research Lab</a>
+        <a class="link" href="https://angrydroid.neocities.org/omni_synthesis_ai-laboratory/">🧪 Omni Synthesis AI Laboratory</a>
+        <a class="link" href="https://angrydroid.neocities.org/ai_superintelligence_outcome_simulator/">🧪 AI Superintelligence Outcome Simulator</a>
+        <a class="link" href="https://angrydroid.neocities.org/project_chronos/">🧪 Project Chronos</a>
+        <a class="link" href="https://angrydroid.neocities.org/blackbox/">🧪 Blackbox</a>
+        <a class="link" href="https://angrydroid.neocities.org/ai_teacher_training_simulator/">🧪 AI Teacher Training Simulator</a>
+        <a class="link" href="https://angrydroid.neocities.org/web_ring/">🔗 Web Ring</a>
+      </div>
+    </div>
+    
+    <!-- Donate Section -->
+    <div class="donate">
+      <a href="https://paypal.me/AngryDroid" target="_blank">💠 Support the Mythos</a>
+    </div>
+    
+    <!-- Web Ring Section -->
+    <div class="webring">
+      <h2>🔗 AngryDroid Web Ring</h2>
+      <div class="webring-links">
+        <a href="https://angrydroid.neocities.org/webring.html?prev=YOUR_SITE_URL">&lt; Previous</a>
+        <a href="https://angrydroid.neocities.org/" rel="nofollow">
+          <img src="https://angrydroid.neocities.org/images/Peek%202025-10-28%2012-45.gif" alt="AngryDroid Webring Button" width="88" height="31">
+        </a>
+        <a href="https://angrydroid.neocities.org/webring.html?next=YOUR_SITE_URL">Next &gt;</a>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+      <p>Mythic Network • Updated October 2025 • 
+        <a href="https://neocities.org" target="_blank">Part of the Neocities Webring</a>
+      </p>
+      <p>Best viewed with Netscape Navigator 2.0+</p>
+      <p><span class="blink">⚠️</span> This site works best at 800x600 resolution <span class="blink">⚠️</span></p>
+    </footer>
+  </div>
+  
+  <!-- 3D Mode -->
+  <div class="three-d-mode" id="threeDMode">
+    <div class="scene-wrap">
+      <div class="noise"></div>
+      <div class="chromatic"></div>
+
+      <div class="titlebar">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title-3d">AngryDroid 3D Capsule Network</div>
+        <div class="subtitle">Interactive 3D interface - Mouse drag orbit, scroll zoom, WASD fly</div>
+      </div>
+
+      <div class="scene">
+        <!-- Camera and world: we'll move these with JS -->
+        <div class="camera" id="camera">
+          <div class="world" id="world">
+            <div class="stars"></div>
+            <!-- Nodes will be dynamically added here -->
+          </div>
+        </div>
+
+        <!-- Link canvas overlays (2D, projected from 3D) -->
+        <canvas id="linksCanvas" style="position:absolute; inset:0; z-index:2; pointer-events:none;"></canvas>
+      </div>
+
+      <div class="status">
+        <div class="pill">Capsules: <span id="capsuleCount">0</span></div>
+        <div class="pill">Neural latency: <span id="latency">23</span>ms</div>
+        <div class="pill btn" id="toggleCRT">Toggle CRT</div>
+        <div class="pill btn" id="resetCam">Reset camera</div>
+        <div class="pill btn" id="backToClassic">← Back to Classic</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== MODE SWITCHING =====
+    const modeToggle = document.getElementById('modeToggle');
+    const classicMode = document.getElementById('classicMode');
+    const threeDMode = document.getElementById('threeDMode');
+    const backToClassicBtn = document.getElementById('backToClassic');
+    
+    modeToggle.addEventListener('click', () => {
+      classicMode.style.display = 'none';
+      threeDMode.style.display = 'block';
+      modeToggle.textContent = '📱 Back to Classic';
+      modeToggle.style.top = '60px';
+      init3DScene();
+    });
+    
+    backToClassicBtn.addEventListener('click', () => {
+      classicMode.style.display = 'block';
+      threeDMode.style.display = 'none';
+      modeToggle.textContent = '🚀 Enter 3D Mode';
+      modeToggle.style.top = '10px';
+    });
+    
+    // ===== 3D SCENE LOGIC =====
+    function init3DScene() {
+      // List of all the links from original site
+      const links = [
+        {name: "AngryDroid Website", url: "https://angrydroid.neocities.org/angrydroidwebsite/", category: "main"},
+        {name: "CRT", url: "https://angrydroid.neocities.org/crt/", category: "main"},
+        {name: "Fortune Fairy", url: "https://angrydroid.neocities.org/fortune_fairy/", category: "main"},
+        {name: "Glitch Purge", url: "https://angrydroid.neocities.org/glitch_purge/", category: "main"},
+        {name: "Mythic Radar", url: "https://angrydroid.neocities.org/mythic_radar/", category: "main"},
+        {name: "Swamp Blog", url: "https://angrydroid.neocities.org/swamp_blog/", category: "main"},
+        {name: "Chat", url: "https://angrydroid.neocities.org/chat/", category: "main"},
+        {name: "Coder", url: "https://angrydroid.neocities.org/coder/", category: "main"},
+        {name: "Qwens Web", url: "https://angrydroid.neocities.org/qwens_web/", category: "main"},
+        {name: "Angry AI", url: "https://angrydroid.neocities.org/angry_ai/", category: "main"},
+        {name: "Safe Haven", url: "https://angrydroid.neocities.org/safe_haven/", category: "main"},
+        
+        {name: "HTML Instruct", url: "https://angrydroid.neocities.org/html_instruct/index.HTML", category: "dev"},
+        {name: "Website Compatibility Tester", url: "https://angrydroid.neocities.org/website_compatibility_tester/", category: "dev"},
+        {name: "Mythic Capsule Builder", url: "https://angrydroid.neocities.org/mythic_capsule_builder/", category: "dev"},
+        {name: "Mythic Capsule Pro", url: "https://angrydroid.neocities.org/mythic-capsule-pro/", category: "dev"},
+        
+        {name: "Mythic Space", url: "https://angrydroid.neocities.org/mythic_space/", category: "network"},
+        {name: "Galactic Mahem Neon Skies", url: "https://angrydroid.neocities.org/galactic_mahem_neon_skies/", category: "network"},
+        {name: "Mythic Pet", url: "https://angrydroid.neocities.org/mythic%20pet/", category: "network"},
+        {name: "Pixel Art Editor", url: "https://angrydroid.neocities.org/pixel%20art%20shrine%20editor/", category: "network"},
+        {name: "Tag It", url: "https://angrydroid.neocities.org/tag_it/", category: "network"},
+        {name: "Wizards Escape", url: "https://angrydroid.neocities.org/wizards_escape/", category: "network"},
+        
+        {name: "Watermark Maker", url: "https://angrydroid.neocities.org/watermark_maker/", category: "utils"},
+        {name: "Mythic Sticker Maker", url: "https://angrydroid.neocities.org/mythic_sticker_maker/", category: "utils"},
+        {name: "Code Repository Blog", url: "https://angrydroid.neocities.org/code_repository_blog/repository%20project", category: "utils"},
+        {name: "Gallery Shrine", url: "https://angrydroid.neocities.org/gallery_shrine/", category: "utils"},
+        {name: "Mythicos", url: "https://angrydroid.neocities.org/mythicos/", category: "utils"},
+        {name: "Retro 70s CRT OS", url: "https://angrydroid.neocities.org/retro_70s_crt_%20oS/", category: "utils"},
+        {name: "Mythic Virtual Cafe", url: "https://angrydroid.neocities.org/mythic_virtual_cafe/", category: "utils"},
+        {name: "Neural Browser", url: "https://angrydroid.neocities.org/neural_browser/", category: "utils"},
+        {name: "Neural Chat", url: "https://angrydroid.neocities.org/neural_chat/", category: "utils"},
+        
+        {name: "Media Player", url: "https://angrydroid.neocities.org/mythic_media_player/media_player", category: "media"},
+        {name: "Mythic Beatbox", url: "https://angrydroid.neocities.org/mythic_beatbox/", category: "media"},
+        {name: "Keyboard Piano", url: "https://angrydroid.neocities.org/keyboard_piano/inde", category: "media"},
+        {name: "Sonic Oscillograph", url: "https://angrydroid.neocities.org/sonic_oscillograph77/", category: "media"},
+        {name: "Neural Voice Terminal", url: "https://angrydroid.neocities.org/nerual_voice_terminal/", category: "media"},
+        {name: "Mythic Calendar", url: "https://angrydroid.neocities.org/mythic_calendar/", category: "media"},
+        {name: "Calculator", url: "https://angrydroid.neocities.org/mythic_Calculator%20/", category: "media"},
+        {name: "Notepad", url: "https://angrydroid.neocities.org/mythic_notepad/", category: "media"},
+        {name: "World Map", url: "https://angrydroid.neocities.org/worldmap/", category: "media"},
+        
+        {name: "Password Generator", url: "https://angrydroid.neocities.org/passwordgenrator/", category: "security"},
+        {name: "Matrix Encryptor", url: "https://angrydroid.neocities.org/matrix_encryptor/", category: "security"},
+        {name: "Security Scanner", url: "https://angrydroid.neocities.org/securityscanner/", category: "security"},
+        {name: "Security Wizard", url: "https://angrydroid.neocities.org/security_wizard/", category: "security"},
+        {name: "Mythic Vault Uplink", url: "https://angrydroid.neocities.org/mythic_vault_uplink/", category: "security"},
+        
+        {name: "AI Lab", url: "https://angrydroid.neocities.org/angrydroid_ai_lab/", category: "misc"},
+        {name: "Fungal Evolution Research", url: "https://angrydroid.neocities.org/fungal_evolution_research_suite/", category: "misc"},
+        {name: "Quantum Wormhole Simulation Lab", url: "https://angrydroid.neocities.org/quantum_wormhole_simulation_lab/", category: "misc"},
+        {name: "Web Ring", url: "https://angrydroid.neocities.org/web_ring/", category: "misc"}
+      ];
+
+      // ===== Camera State =====
+      const cameraEl = document.getElementById('camera');
+      const worldEl = document.getElementById('world');
+      const canvas = document.getElementById('linksCanvas');
+      const ctx = canvas.getContext('2d');
+      const capsuleCountEl = document.getElementById('capsuleCount');
+
+      let cam = {
+        yaw: 0, pitch: -0.1, dist: 1200,
+        x: 0, y: 0, z: 0
+      };
+      let mouse = { dragging: false, lastX: 0, lastY: 0 };
+      let keys = new Set();
+      let lastFrame = performance.now();
+      let panes = [];
+
+      // Resize canvas to viewport
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // Category colors
+      const categoryColors = {
+        main: '#00a8ff',
+        dev: '#9c88ff',
+        network: '#4cd137',
+        utils: '#fbc531',
+        media: '#e84118',
+        security: '#8c7ae6',
+        misc: '#00cec9'
+      };
+
+      // Create panes organized by category
+      function createPanes() {
+        const categories = {};
+        
+        // Group links by category
+        links.forEach(link => {
+          if (!categories[link.category]) {
+            categories[link.category] = [];
+          }
+          categories[link.category].push(link);
+        });
+        
+        const categoryPositions = {
+          main: { x: 0, y: 0, z: 0 },
+          dev: { x: 800, y: 200, z: 400 },
+          network: { x: -800, y: 200, z: 400 },
+          utils: { x: 0, y: 400, z: -400 },
+          media: { x: 800, y: -200, z: -400 },
+          security: { x: -800, y: -200, z: -400 },
+          misc: { x: 0, y: -400, z: 0 }
+        };
+        
+        let paneIndex = 0;
+        
+        Object.keys(categories).forEach(category => {
+          const linksInCategory = categories[category];
+          const basePos = categoryPositions[category];
+          const radius = 300;
+          const count = linksInCategory.length;
+          
+          linksInCategory.forEach((link, i) => {
+            const angle = (i / count) * Math.PI * 2;
+            const x = basePos.x + Math.cos(angle) * radius;
+            const y = basePos.y + Math.sin(angle) * radius;
+            const z = basePos.z + (Math.random() * 200 - 100);
+            
+            const pane = document.createElement('div');
+            pane.className = 'pane';
+            pane.dataset.x = x;
+            pane.dataset.y = y;
+            pane.dataset.z = z;
+            pane.setAttribute('data-url', link.url);
+            pane.setAttribute('data-category', category);
+            
+            const color = categoryColors[category] || '#ffffff';
+            
+            pane.innerHTML = `
+              <div class="frame">
+                <div class="bar" style="background: linear-gradient(180deg, ${color}22, ${color}11);">
+                  <div class="dots">
+                    <div class="dot close"></div>
+                    <div class="dot min"></div>
+                    <div class="dot max"></div>
+                  </div>
+                  <span>${link.name}</span>
+                </div>
+                <div class="content">
+                  <iframe loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms" src="${link.url}"></iframe>
+                  <div class="fallback" style="display:none">
+                    <div class="thumb" style="background: linear-gradient(180deg, ${color}33, ${color}11);"></div>
+                    <div>${link.name}</div>
+                    <div class="hint">Click to open capsule</div>
+                  </div>
+                  <div class="pane-crt"></div>
+                  <div class="glass"></div>
+                </div>
+              </div>
+            `;
+            
+            worldEl.appendChild(pane);
+            
+            panes.push({
+              el: pane,
+              pos: { x, y, z },
+              url: link.url,
+              category: category
+            });
+            
+            paneIndex++;
+          });
+        });
+        
+        capsuleCountEl.textContent = panes.length;
+      }
+
+      // Apply transforms to panes
+      function updatePanes() {
+        panes.forEach(p => {
+          p.el.style.transform = `translate3d(${p.pos.x}px, ${p.pos.y}px, ${p.pos.z}px)`;
+        });
+      }
+
+      // Mouse orbit control
+      document.addEventListener('mousedown', (e) => {
+        mouse.dragging = true; 
+        mouse.lastX = e.clientX; 
+        mouse.lastY = e.clientY;
+      });
+      document.addEventListener('mouseup', () => mouse.dragging = false);
+      document.addEventListener('mouseleave', () => mouse.dragging = false);
+      document.addEventListener('mousemove', (e) => {
+        if (!mouse.dragging) return;
+        const dx = e.clientX - mouse.lastX;
+        const dy = e.clientY - mouse.lastY;
+        mouse.lastX = e.clientX; 
+        mouse.lastY = e.clientY;
+        cam.yaw += dx * 0.0025;
+        cam.pitch = Math.max(-Math.PI/2 + 0.05, Math.min(Math.PI/2 - 0.05, cam.pitch - dy * 0.0025));
+      });
+
+      // Scroll zoom
+      document.addEventListener('wheel', (e) => {
+        cam.dist = Math.max(300, Math.min(2000, cam.dist + e.deltaY));
+      }, { passive: true });
+
+      // WASD fly (relative to camera yaw)
+      document.addEventListener('keydown', (e) => { 
+        keys.add(e.key.toLowerCase()); 
+      });
+      document.addEventListener('keyup', (e) => { 
+        keys.delete(e.key.toLowerCase()); 
+      });
+
+      function updateCamera(dt) {
+        const speed = 0.25 * dt;
+        const cosY = Math.cos(cam.yaw), sinY = Math.sin(cam.yaw);
+
+        // Forward/backward
+        if (keys.has('w')) { cam.x += sinY * speed * 100; cam.z += cosY * speed * 100; }
+        if (keys.has('s')) { cam.x -= sinY * speed * 100; cam.z -= cosY * speed * 100; }
+        // Strafe
+        if (keys.has('a')) { cam.x -= cosY * speed * 100; cam.z += sinY * speed * 100; }
+        if (keys.has('d')) { cam.x += cosY * speed * 100; cam.z -= sinY * speed * 100; }
+        // Elevation
+        if (keys.has('q')) { cam.y += speed * 100; }
+        if (keys.has('e')) { cam.y -= speed * 100; }
+
+        // Update camera transform
+        cameraEl.style.transform = `
+          translate3d(${window.innerWidth/2}px, ${window.innerHeight/2}px, 0)
+          rotateY(${cam.yaw}rad) rotateX(${cam.pitch}rad)
+        `;
+        worldEl.style.transform = `
+          translate3d(${-cam.x}px, ${-cam.y}px, ${-cam.z - Math.cos(cam.pitch) * cam.dist}px)
+        `;
+      }
+
+      // Project 3D to 2D
+      function project(vec3) {
+        const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+        const cx = Math.cos(cam.pitch), sx = Math.sin(cam.pitch);
+
+        let x = vec3.x - cam.x, y = vec3.y - cam.y, z = vec3.z - cam.z;
+
+        // Rotate around Y (yaw)
+        const x1 =  x * cy + z * sy;
+        const z1 = -x * sy + z * cy;
+
+        // Rotate around X (pitch)
+        const y2 =  y * cx - z1 * sx;
+        const z2 =  y * sx + z1 * cx;
+
+        // Perspective projection
+        const fov = 900;
+        const px = (window.innerWidth / 2) + (x1 * fov / (z2 + cam.dist));
+        const py = (window.innerHeight / 2) + (y2 * fov / (z2 + cam.dist));
+
+        return { x: px, y: py, behind: (z2 + cam.dist) < 100 };
+      }
+
+      // Draw neural links between panes
+      function drawLinks() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Connect panes within same category
+        for (let i = 0; i < panes.length; i++) {
+          const a = panes[i];
+          const pa = project(a.pos);
+          
+          for (let j = i + 1; j < panes.length; j++) {
+            const b = panes[j];
+            
+            // Connect within same category or to central hub
+            if (a.category === b.category) {
+              const pb = project(b.pos);
+              
+              if (pa.behind || pb.behind) continue;
+              
+              const dx = a.pos.x - b.pos.x;
+              const dy = a.pos.y - b.pos.y;
+              const dz = a.pos.z - b.pos.z;
+              const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+              
+              if (dist < 500) {
+                const color = categoryColors[a.category] || '#ffffff';
+                ctx.strokeStyle = color + '80';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(pa.x, pa.y);
+                ctx.lineTo(pb.x, pb.y);
+                ctx.stroke();
+              }
+            }
+          }
+        }
+        
+        // Draw nodes
+        panes.forEach(pane => {
+          const p = project(pane.pos);
+          if (p.behind) return;
+          
+          const color = categoryColors[pane.category] || '#ffffff';
+          ctx.fillStyle = color;
+          ctx.beginPath(); 
+          ctx.arc(p.x, p.y, 4, 0, Math.PI*2); 
+          ctx.fill();
+          
+          // Glow effect
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+      }
+
+      // Click panes: open URL
+      function setupPaneEvents() {
+        panes.forEach(p => {
+          p.el.addEventListener('click', () => {
+            if (p.url) window.open(p.url, '_blank', 'noopener,noreferrer');
+          });
+        });
+      }
+
+      // Setup iframe fallbacks
+      function setupFallbacks() {
+        document.querySelectorAll('.pane iframe').forEach(frame => {
+          const fallback = frame.parentElement.querySelector('.fallback');
+          const timer = setTimeout(() => {
+            if (frame.contentWindow === null && fallback) {
+              frame.style.display = 'none';
+              fallback.style.display = 'grid';
+            }
+          }, 2500);
+          frame.addEventListener('load', () => clearTimeout(timer));
+          frame.addEventListener('error', () => {
+            if (fallback) { 
+              frame.style.display = 'none'; 
+              fallback.style.display = 'grid'; 
+            }
+          });
+        });
+      }
+
+      // Toggle CRT effect
+      const toggleCRT = document.getElementById('toggleCRT');
+      toggleCRT.addEventListener('click', () => {
+        document.body.classList.toggle('crt-off');
+        toggleCRT.textContent = document.body.classList.contains('crt-off') ? 'Enable CRT' : 'Toggle CRT';
+      });
+
+      // Reset camera
+      document.getElementById('resetCam').addEventListener('click', () => {
+        cam = { yaw: 0, pitch: -0.1, dist: 1200, x: 0, y: 0, z: 0 };
+      });
+
+      // Animation loop
+      function tick(now) {
+        const dt = now - lastFrame; 
+        lastFrame = now;
+        updateCamera(dt);
+        updatePanes();
+        drawLinks();
+        document.getElementById('latency').textContent = Math.max(16, Math.round(dt));
+        requestAnimationFrame(tick);
+      }
+
+      // Initialize
+      createPanes();
+      setupPaneEvents();
+      setupFallbacks();
+      requestAnimationFrame(tick);
+    }
+
+    // Simple visitor counter (for classic mode)
+    const visitorCountElement = document.getElementById('visitorCount');
+    let visitorCount = localStorage.getItem('visitorCount') || 1001;
+    visitorCount = parseInt(visitorCount) + 1;
+    localStorage.setItem('visitorCount', visitorCount);
+    visitorCountElement.textContent = visitorCount.toString().padStart(6, '0');
+  </script>
+</body>
+</html>
